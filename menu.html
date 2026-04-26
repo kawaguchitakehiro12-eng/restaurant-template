@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MENU | 炭火割烹 玄</title>
+
+<style>
+:root{
+--black:#080706;
+--gold:#b8945c;
+--white:#f5f0e8;
+--muted:#aaa196;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+background:var(--black);
+color:var(--white);
+font-family:"Yu Mincho",serif;
+line-height:1.8;
+}
+
+a{
+text-decoration:none;
+color:inherit;
+}
+
+header{
+min-height:70vh;
+display:flex;
+align-items:center;
+padding:8vw;
+background:
+linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.65)),
+url("https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1800&auto=format&fit=crop")
+center/cover;
+}
+
+.hero{
+max-width:800px;
+}
+
+.small{
+color:var(--gold);
+letter-spacing:.35em;
+font-size:12px;
+margin-bottom:25px;
+}
+
+h1{
+font-weight:400;
+font-size:clamp(50px,9vw,110px);
+line-height:1.05;
+margin-bottom:25px;
+}
+
+.hero p{
+max-width:540px;
+color:var(--muted);
+}
+
+nav{
+position:fixed;
+top:0;
+left:0;
+right:0;
+padding:24px 8vw;
+display:flex;
+justify-content:space-between;
+background:rgba(8,7,6,.85);
+backdrop-filter:blur(8px);
+z-index:100;
+}
+
+nav a{
+margin-left:28px;
+font-size:12px;
+letter-spacing:.18em;
+}
+
+section{
+padding:100px 8vw;
+}
+
+.section-label{
+color:var(--gold);
+font-size:12px;
+letter-spacing:.3em;
+margin-bottom:20px;
+}
+
+h2{
+font-size:clamp(34px,5vw,70px);
+font-weight:400;
+margin-bottom:50px;
+}
+
+.menu-group{
+margin-bottom:90px;
+}
+
+.menu-item{
+display:grid;
+grid-template-columns:1fr auto;
+gap:30px;
+padding:22px 0;
+border-bottom:1px solid rgba(184,148,92,.18);
+}
+
+.menu-item h3{
+font-weight:400;
+font-size:24px;
+margin-bottom:8px;
+}
+
+.menu-item p{
+color:var(--muted);
+font-size:14px;
+max-width:620px;
+}
+
+.price{
+color:var(--gold);
+letter-spacing:.08em;
+}
+
+.gallery{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:24px;
+}
+
+.gallery img{
+width:100%;
+height:500px;
+object-fit:cover;
+filter:brightness(.85);
+}
+
+.cta{
+text-align:center;
+padding:130px 30px;
+background:
+linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.85)),
+url("https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1800&auto=format&fit=crop")
+center/cover;
+}
+
+.btn{
+display:inline-block;
+margin-top:35px;
+padding:15px 30px;
+border:1px solid var(--gold);
+color:var(--gold);
+}
+
+.btn:hover{
+background:var(--gold);
+color:#000;
+}
+
+footer{
+padding:30px;
+text-align:center;
+color:#756d64;
+font-size:12px;
+}
+
+@media(max-width:800px){
+
+.menu-item{
+grid-template-columns:1fr;
+}
+
+.gallery{
+grid-template-columns:1fr;
+}
+
+.gallery img{
+height:320px;
+}
+
+nav{
+padding:20px 24px;
+}
+
+nav a{
+margin-left:14px;
+font-size:10px;
+}
+
+section{
+padding:70px 24px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+<div>炭火割烹 玄</div>
+<div>
+<a href="index.html">TOP</a>
+<a href="#">MENU</a>
+<a href="#reserve">RESERVE</a>
+</div>
+</nav>
+
+<header>
+<div class="hero">
+<div class="small">SIGNATURE MENU</div>
+<h1>料理で、<br>店の哲学を伝える。</h1>
+<p>
+季節と火入れにこだわった料理を、
+日本酒とともにゆっくりお楽しみください。
+</p>
+</div>
+</header>
+
+
+<section>
+<div class="section-label">COURSE</div>
+<h2>コース</h2>
+
+<div class="menu-group">
+
+<div class="menu-item">
+<div>
+<h3>玄 おまかせコース</h3>
+<p>旬の前菜、刺身、炭火焼、土鍋ご飯まで全8品</p>
+</div>
+<div class="price">¥7,800</div>
+</div>
+
+<div class="menu-item">
+<div>
+<h3>季節の特選コース</h3>
+<p>接待や記念日におすすめの上位コース</p>
+</div>
+<div class="price">¥12,000</div>
+</div>
+
+</div>
+</section>
+
+
+<section>
+<div class="section-label">FOOD</div>
+<h2>逸品料理</h2>
+
+<div class="menu-group">
+
+<div class="menu-item">
+<div>
+<h3>炭火焼き鳥五種</h3>
+<p>香り高い定番盛り合わせ</p>
+</div>
+<div class="price">¥1,480</div>
+</div>
+
+<div class="menu-item">
+<div>
+<h3>旬魚刺身盛り</h3>
+<p>日替わり鮮魚盛り</p>
+</div>
+<div class="price">¥1,980</div>
+</div>
+
+<div class="menu-item">
+<div>
+<h3>和牛炭火焼き</h3>
+<p>赤身の旨味をシンプルに</p>
+</div>
+<div class="price">¥2,480</div>
+</div>
+
+</div>
+</section>
+
+
+<section>
+<div class="section-label">DRINK</div>
+<h2>日本酒 / 酒</h2>
+
+<div class="menu-group">
+
+<div class="menu-item">
+<div>
+<h3>十四代</h3>
+</div>
+<div class="price">¥1,500~</div>
+</div>
+
+<div class="menu-item">
+<div>
+<h3>新政</h3>
+</div>
+<div class="price">¥1,300~</div>
+</div>
+
+<div class="menu-item">
+<div>
+<h3>季節限定酒</h3>
+</div>
+<div class="price">ask</div>
+</div>
+
+</div>
+</section>
+
+
+<section>
+<div class="section-label">GALLERY</div>
+<h2>空間</h2>
+
+<div class="gallery">
+<img src="https://images.unsplash.com/photo-1498654896293-37aacf113fd9?q=80&w=1200&auto=format&fit=crop">
+<img src="https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?q=80&w=1200&auto=format&fit=crop">
+</div>
+</section>
+
+
+<section id="reserve" class="cta">
+<div class="section-label">RESERVATION</div>
+<h2>ご予約はこちら</h2>
+<a href="#" class="btn">LINEで予約する</a>
+</section>
+
+<footer>
+© SUMIBI KAPPO GEN
+</footer>
+
+</body>
+</html>
