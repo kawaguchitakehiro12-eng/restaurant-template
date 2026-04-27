@@ -287,11 +287,28 @@
       background: #050504;
     }
 
-    @media (max-width: 800px) {
-      .nav-links {
-        display: none;
-      }
+  @media (max-width: 800px) {
+  .nav {
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 18px 22px;
+    background: rgba(8,7,6,0.88);
+    backdrop-filter: blur(8px);
+  }
 
+  .brand {
+    font-size: 13px;
+    letter-spacing: 0.12em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 14px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+}
       .hero {
         padding: 24px;
         align-items: flex-end;
