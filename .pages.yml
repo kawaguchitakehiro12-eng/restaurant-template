@@ -1,0 +1,26 @@
+media:
+  input: images
+  output: /images
+
+content:
+  - name: site
+    label: 店舗情報
+    type: file
+    path: data/site.json
+
+    fields:
+      - name: shopName
+        label: 店名
+        type: string
+
+      - name: address
+        label: 住所
+        type: string
+
+      - name: open
+        label: 営業時間
+        type: string
+
+      - name: closed
+        label: 定休日
+        type: string
