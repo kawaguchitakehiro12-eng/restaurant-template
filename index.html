@@ -364,7 +364,7 @@ transform:translateY(0);
 
   <header class="hero">
     <nav class="nav">
-      <div class="brand">炭火割烹 玄</div>
+      <div class="brand"><span id="shopName"></span></div>
       <div class="nav-links">
         <a href="#concept">CONCEPT</a>
         <a href="menu.html">MENU</a>
@@ -441,15 +441,15 @@ transform:translateY(0);
       <div class="info-list">
         <div class="info-row">
           <span>ADDRESS</span>
-          <div>東京都豊島区要町 1-2-3</div>
+          <span id="address"></span>
         </div>
         <div class="info-row">
           <span>OPEN</span>
-          <div>17:00 - 24:00</div>
+         <span id="open"></span>
         </div>
         <div class="info-row">
           <span>CLOSED</span>
-          <div>月曜日</div>
+          <span id="closed"></span>
         </div>
         <div class="info-row">
           <span>TEL</span>
@@ -490,6 +490,16 @@ threshold:0.15
 
 targets.forEach(target=>observer.observe(target));
 </script>
-
+<script>
+fetch('./data/site.json')
+.then(res => res.json())
+.then(data => {
+  document.getElementById('shopName').innerText = data.shopName;
+  document.getElementById('address').innerText = data.address;
+  document.getElementById('open').innerText = data.open;
+  document.getElementById('closed').innerText = data.closed;
+});
+</script>
+  
 </body>
 </html>
