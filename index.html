@@ -490,16 +490,17 @@ threshold:0.15
 
 targets.forEach(target=>observer.observe(target));
 </script>
-<script>
-fetch('./data/site.json')
-.then(res => res.json())
-.then(data => {
-  document.getElementById('shopName').innerText = data.shopName;
-  document.getElementById('address').innerText = data.address;
-  document.getElementById('open').innerText = data.open;
-  document.getElementById('closed').innerText = data.closed;
-});
-</script>
   
+    <script>
+    fetch('./site.json')
+      .then(response => response.json())
+      .then(data => {
+       document.getElementById('shopName').innerText = data.shopName;
+    document.getElementById('address').innerText = data.address;
+    document.getElementById('open').innerText = data.open;
+    document.getElementById('closed').innerText = data.closed; 
+      });
+  </script>
+
 </body>
 </html>
