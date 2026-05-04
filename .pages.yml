@@ -24,3 +24,37 @@ content:
       - name: closed
         label: 定休日
         type: string
+
+  - name: menu
+    label: メニュー
+    type: file
+    path: data/menu.json
+
+    fields:
+      - name: categories
+        label: メニューカテゴリ
+        type: object
+        list: true
+
+        fields:
+          - name: name
+            label: カテゴリ名
+            type: string
+
+          - name: items
+            label: 商品
+            type: object
+            list: true
+
+            fields:
+              - name: name
+                label: 商品名
+                type: string
+
+              - name: price
+                label: 価格
+                type: string
+
+              - name: description
+                label: 説明文
+                type: text
