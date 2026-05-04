@@ -24,12 +24,9 @@
 
     h1 { font-size: 26px; margin-bottom: 8px; }
     h2 { font-size: 22px; margin-top: 36px; border-top: 1px solid #eee; padding-top: 28px; }
-    h3 { font-size: 18px; margin-top: 24px; }
+    h3 { font-size: 18px; margin: 0; }
 
-    .desc {
-      color: #666;
-      margin-bottom: 24px;
-    }
+    .desc { color: #666; margin-bottom: 24px; }
 
     label {
       display: block;
@@ -77,6 +74,13 @@
       margin-top: 14px;
     }
 
+    .item-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
     .row {
       display: grid;
       grid-template-columns: 1fr 160px;
@@ -101,9 +105,26 @@
       margin-top: 14px;
     }
 
-    .delete-button {
-      background: #b3261e;
-      margin-top: 12px;
+    .text-delete {
+      width: auto;
+      margin-top: 0;
+      padding: 0;
+      background: none;
+      color: #999;
+      font-size: 12px;
+      font-weight: normal;
+      border-radius: 0;
+    }
+
+    .category-delete {
+      width: auto;
+      background: none;
+      color: #999;
+      font-size: 12px;
+      font-weight: normal;
+      padding: 0;
+      margin-top: 14px;
+      border-radius: 0;
     }
 
     .note {
@@ -198,7 +219,7 @@
           <div id="items-${categoryIndex}"></div>
 
           <button class="sub-button" onclick="addItem(${categoryIndex})">＋ 商品を追加</button>
-          <button class="delete-button" onclick="deleteCategory(${categoryIndex})">カテゴリを削除</button>
+          <button class="category-delete" onclick="deleteCategory(${categoryIndex})">カテゴリを削除</button>
         `;
 
         editor.appendChild(categoryDiv);
@@ -210,7 +231,10 @@
           itemDiv.className = 'menu-item';
 
           itemDiv.innerHTML = `
-            <h3>商品</h3>
+            <div class="item-head">
+              <h3>商品</h3>
+              <button class="text-delete" onclick="deleteItem(${categoryIndex}, ${itemIndex})">削除</button>
+            </div>
 
             <label>商品名</label>
             <input type="text" value="${item.name || ''}" oninput="updateItem(${categoryIndex}, ${itemIndex}, 'name', this.value)">
@@ -228,8 +252,6 @@
 
             <label>説明文</label>
             <textarea oninput="updateItem(${categoryIndex}, ${itemIndex}, 'description', this.value)">${item.description || ''}</textarea>
-
-            <button class="delete-button" onclick="deleteItem(${categoryIndex}, ${itemIndex})">商品を削除</button>
           `;
 
           itemsWrap.appendChild(itemDiv);
