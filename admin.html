@@ -132,6 +132,12 @@
       font-size: 13px;
       color: #777;
     }
+
+    .status {
+      margin-top: 12px;
+      font-size: 14px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -163,12 +169,15 @@
 
     <button class="sub-button" onclick="addCategory()">＋ カテゴリを追加</button>
 
-    <button onclick="savePreview()">保存する</button>
+    <button id="saveButton" onclick="saveData()">保存する</button>
+    <div id="status" class="status"></div>
 
-    <p class="note">※現在はテスト版です。次の工程で実際にサイトへ反映できるようにします。</p>
+    <p class="note">※保存後、サイト反映まで1〜2分かかる場合があります。</p>
   </div>
 
   <script>
+    const API_URL = "https://lingering-cell-217e.kawaguchitakehiro12.workers.dev";
+
     let menuData = {
       categories: []
     };
@@ -214,7 +223,7 @@
 
         categoryDiv.innerHTML = `
           <label>カテゴリ名</label>
-          <input type="text" value="${category.name || ''}" oninput="updateCategoryName(${categoryIndex}, this.value)">
+          <input type="text" value="${escapeHtml(category.name || '')}" oninput="updateCategoryName(${categoryIndex}, this.value)">
 
           <div id="items-${categoryIndex}"></div>
 
@@ -237,12 +246,12 @@
             </div>
 
             <label>商品名</label>
-            <input type="text" value="${item.name || ''}" oninput="updateItem(${categoryIndex}, ${itemIndex}, 'name', this.value)">
+            <input type="text" value="${escapeHtml(item.name || '')}" oninput="updateItem(${categoryIndex}, ${itemIndex}, 'name', this.value)">
 
             <div class="row">
               <div>
                 <label>価格</label>
-                <input type="text" value="${item.price || ''}" oninput="updateItem(${categoryIndex}, ${itemIndex}, 'price', this.value)">
+                <input type="text" value="${escapeHtml(item.price || '')}" oninput="updateItem(${categoryIndex}, ${itemIndex}, 'price', this.value)">
               </div>
               <div>
                 <label>表示順</label>
@@ -251,7 +260,7 @@
             </div>
 
             <label>説明文</label>
-            <textarea oninput="updateItem(${categoryIndex}, ${itemIndex}, 'description', this.value)">${item.description || ''}</textarea>
+            <textarea oninput="updateItem(${categoryIndex}, ${itemIndex}, 'description', this.value)">${escapeHtml(item.description || '')}</textarea>
           `;
 
           itemsWrap.appendChild(itemDiv);
@@ -297,19 +306,57 @@
       renderMenuEditor();
     }
 
-    function savePreview() {
+    async function saveData() {
+      const status = document.getElementById('status');
+      const button = document.getElementById('saveButton');
+
       const siteData = {
         shopName: document.getElementById('shopName').value,
         address: document.getElementById('address').value,
         open: document.getElementById('open').value,
         closed: document.getElementById('closed').value,
-        mainImage: document.getElementById('preview').src
+        mainImage: document.getElementById('preview').src || ''
       };
 
-      console.log('店舗情報', siteData);
-      console.log('メニュー情報', menuData);
+      button.disabled = true;
+      button.textContent = '保存中...';
+      status.textContent = '';
 
-      alert('画面上の編集はできています。次の工程でサイトへ保存・反映できるようにします。');
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            siteData,
+            menuData
+          })
+        });
+
+        const result = await res.json();
+
+        if (!res.ok || !result.success) {
+          throw new Error(result.error || '保存に失敗しました');
+        }
+
+        status.style.color = '#118a35';
+        status.textContent = '保存しました。サイト反映まで1〜2分お待ちください。';
+      } catch (error) {
+        status.style.color = '#b3261e';
+        status.textContent = '保存に失敗しました：' + error.message;
+      } finally {
+        button.disabled = false;
+        button.textContent = '保存する';
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll('&', '&amp;')
+        .replaceAll('"', '&quot;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;');
     }
   </script>
 
