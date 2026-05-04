@@ -14,7 +14,7 @@
     }
 
     .wrap {
-      max-width: 720px;
+      max-width: 820px;
       margin: auto;
       background: #fff;
       padding: 24px;
@@ -22,10 +22,9 @@
       box-shadow: 0 8px 24px rgba(0,0,0,0.08);
     }
 
-    h1 {
-      font-size: 24px;
-      margin-bottom: 8px;
-    }
+    h1 { font-size: 26px; margin-bottom: 8px; }
+    h2 { font-size: 22px; margin-top: 36px; border-top: 1px solid #eee; padding-top: 28px; }
+    h3 { font-size: 18px; margin-top: 24px; }
 
     .desc {
       color: #666;
@@ -39,13 +38,18 @@
       margin-bottom: 6px;
     }
 
-    input {
+    input, textarea {
       width: 100%;
       padding: 12px;
       border: 1px solid #ddd;
       border-radius: 10px;
       font-size: 16px;
       box-sizing: border-box;
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
     }
 
     .photo-preview {
@@ -57,9 +61,31 @@
       background: #eee;
     }
 
+    .category {
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
+      border-radius: 14px;
+      padding: 18px;
+      margin-top: 18px;
+    }
+
+    .menu-item {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 14px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 160px;
+      gap: 12px;
+    }
+
     button {
       width: 100%;
-      margin-top: 24px;
+      margin-top: 20px;
       padding: 14px;
       border: none;
       border-radius: 999px;
@@ -68,6 +94,16 @@
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
+    }
+
+    .sub-button {
+      background: #444;
+      margin-top: 14px;
+    }
+
+    .delete-button {
+      background: #b3261e;
+      margin-top: 12px;
     }
 
     .note {
@@ -81,7 +117,9 @@
 
   <div class="wrap">
     <h1>店舗管理画面</h1>
-    <p class="desc">店舗情報と写真を編集できます。</p>
+    <p class="desc">店舗情報・写真・メニューを編集できます。</p>
+
+    <h2>店舗情報</h2>
 
     <label>店名</label>
     <input id="shopName" type="text">
@@ -99,12 +137,21 @@
     <input id="mainImage" type="file" accept="image/*">
     <img id="preview" class="photo-preview" src="" alt="写真プレビュー">
 
+    <h2>メニュー</h2>
+    <div id="menuEditor"></div>
+
+    <button class="sub-button" onclick="addCategory()">＋ カテゴリを追加</button>
+
     <button onclick="savePreview()">保存する</button>
 
     <p class="note">※現在はテスト版です。次の工程で実際にサイトへ反映できるようにします。</p>
   </div>
 
   <script>
+    let menuData = {
+      categories: []
+    };
+
     fetch('./data/site.json')
       .then(res => res.json())
       .then(data => {
@@ -118,6 +165,13 @@
         }
       });
 
+    fetch('./data/menu.json')
+      .then(res => res.json())
+      .then(data => {
+        menuData = data;
+        renderMenuEditor();
+      });
+
     document.getElementById('mainImage').addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -129,8 +183,111 @@
       reader.readAsDataURL(file);
     });
 
+    function renderMenuEditor() {
+      const editor = document.getElementById('menuEditor');
+      editor.innerHTML = '';
+
+      menuData.categories.forEach((category, categoryIndex) => {
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'category';
+
+        categoryDiv.innerHTML = `
+          <label>カテゴリ名</label>
+          <input type="text" value="${category.name || ''}" oninput="updateCategoryName(${categoryIndex}, this.value)">
+
+          <div id="items-${categoryIndex}"></div>
+
+          <button class="sub-button" onclick="addItem(${categoryIndex})">＋ 商品を追加</button>
+          <button class="delete-button" onclick="deleteCategory(${categoryIndex})">カテゴリを削除</button>
+        `;
+
+        editor.appendChild(categoryDiv);
+
+        const itemsWrap = document.getElementById(`items-${categoryIndex}`);
+
+        category.items.forEach((item, itemIndex) => {
+          const itemDiv = document.createElement('div');
+          itemDiv.className = 'menu-item';
+
+          itemDiv.innerHTML = `
+            <h3>商品</h3>
+
+            <label>商品名</label>
+            <input type="text" value="${item.name || ''}" oninput="updateItem(${categoryIndex}, ${itemIndex}, 'name', this.value)">
+
+            <div class="row">
+              <div>
+                <label>価格</label>
+                <input type="text" value="${item.price || ''}" oninput="updateItem(${categoryIndex}, ${itemIndex}, 'price', this.value)">
+              </div>
+              <div>
+                <label>表示順</label>
+                <input type="number" value="${item.order || itemIndex + 1}" oninput="updateItem(${categoryIndex}, ${itemIndex}, 'order', this.value)">
+              </div>
+            </div>
+
+            <label>説明文</label>
+            <textarea oninput="updateItem(${categoryIndex}, ${itemIndex}, 'description', this.value)">${item.description || ''}</textarea>
+
+            <button class="delete-button" onclick="deleteItem(${categoryIndex}, ${itemIndex})">商品を削除</button>
+          `;
+
+          itemsWrap.appendChild(itemDiv);
+        });
+      });
+    }
+
+    function updateCategoryName(categoryIndex, value) {
+      menuData.categories[categoryIndex].name = value;
+    }
+
+    function updateItem(categoryIndex, itemIndex, key, value) {
+      menuData.categories[categoryIndex].items[itemIndex][key] = value;
+    }
+
+    function addCategory() {
+      menuData.categories.push({
+        name: '新しいカテゴリ',
+        items: []
+      });
+      renderMenuEditor();
+    }
+
+    function deleteCategory(categoryIndex) {
+      if (!confirm('このカテゴリを削除しますか？')) return;
+      menuData.categories.splice(categoryIndex, 1);
+      renderMenuEditor();
+    }
+
+    function addItem(categoryIndex) {
+      menuData.categories[categoryIndex].items.push({
+        name: '新しい商品',
+        price: '0円',
+        description: '',
+        order: menuData.categories[categoryIndex].items.length + 1
+      });
+      renderMenuEditor();
+    }
+
+    function deleteItem(categoryIndex, itemIndex) {
+      if (!confirm('この商品を削除しますか？')) return;
+      menuData.categories[categoryIndex].items.splice(itemIndex, 1);
+      renderMenuEditor();
+    }
+
     function savePreview() {
-      alert('次の工程で、ここから実際にサイトへ保存できるようにします。');
+      const siteData = {
+        shopName: document.getElementById('shopName').value,
+        address: document.getElementById('address').value,
+        open: document.getElementById('open').value,
+        closed: document.getElementById('closed').value,
+        mainImage: document.getElementById('preview').src
+      };
+
+      console.log('店舗情報', siteData);
+      console.log('メニュー情報', menuData);
+
+      alert('画面上の編集はできています。次の工程でサイトへ保存・反映できるようにします。');
     }
   </script>
 
